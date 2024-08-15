@@ -21,8 +21,10 @@ public class MyUserController {
 	
 	@Autowired
 	MyUserService myUserService;
-
-	@GetMapping("admin/getusers")
+	
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping("/getusers")
 	public ResponseEntity<List<UserProjection>> getUserDetails(){
 		
 		return new ResponseEntity<>(myUserService.getUserDetails(),HttpStatus.OK);
@@ -33,5 +35,21 @@ public class MyUserController {
 		return myUserService.register(user);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@GetMapping({"/forUser"})
+	public String forUser() {
+		return "Accessible only for the user";
+	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping({"/forAdmin"})
+	public String forAdmin() {
+		return "Accessible only for the Admin";
+	}
+	
+	@PostMapping("/login")
+	public String login(@RequestBody MyUser user) {
+		return myUserService.verify(user);
+	}
 }
+	
