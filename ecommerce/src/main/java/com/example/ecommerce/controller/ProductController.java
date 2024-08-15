@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +31,7 @@ public class ProductController {
 	
 	@GetMapping("/home")
 	public String home() {
-		return "Welcome to new project";
+		return "Welcome to ecommerce management system";
 	}
 	
 	@GetMapping("/products")
@@ -44,8 +43,9 @@ public class ProductController {
 	public Product getProductById(@PathVariable int id){
 		return service.getProductsById(id);
 	}
-	
-	@PostMapping("admin/product")
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PostMapping("/product")
 	public ResponseEntity<?> addProduct(@RequestBody Product product) {
 		try {
 			Product product1=service.addProduct(product);
@@ -55,8 +55,9 @@ public class ProductController {
 		  return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@PutMapping("admin/products/{id}")
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PutMapping("/products/{id}")
 	public ResponseEntity<String> updateProduct(@PathVariable int id,@RequestBody Product product)
 	{
 		Product product1=service.getProductsById(id);
@@ -82,8 +83,9 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 	
-	
-	@DeleteMapping("admin/product/{id}")
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@DeleteMapping("/product/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable int id){
 		service.deleteProduct(id);
 		return new ResponseEntity<>("deleted",HttpStatus.OK);
