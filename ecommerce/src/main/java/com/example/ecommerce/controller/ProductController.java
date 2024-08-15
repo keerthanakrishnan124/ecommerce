@@ -32,7 +32,7 @@ public class ProductController {
 	
 	@GetMapping("/home")
 	public String home() {
-		return "Wlcome to new project";
+		return "Welcome to new project";
 	}
 	
 	@GetMapping("/products")
