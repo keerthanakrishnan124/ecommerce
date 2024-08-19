@@ -2,7 +2,7 @@ package com.example.ecommerce.model;
 
 public class OrderDetailResponse {
 
-	private String orderName;
+    private String orderName;
     private String orderStatus;
     private double orderAmount;
     private String fullAddress;
